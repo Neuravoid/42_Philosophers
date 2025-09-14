@@ -6,7 +6,7 @@
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 13:53:19 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 16:20:56 by ualkan           ###   ########.fr       */
+/*   Updated: 2025/09/14 18:17:53 by ualkan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,18 @@ void	start_simulation(t_sim *sim)
 {
 	int	i;
 
+	sim->start_time = get_time() + (sim->philo_count * 2) / 1000;
 	i = 0;
-	sim->start_time = get_time() + (sim->philo_count / 100);
 	while (i < sim->philo_count)
 	{
-		pthread_create(&sim->philos[i].thread_handle, NULL,
-			thread_start, &sim->philos[i]);
+		sim->philos[i].last_meal_eaten = sim->start_time;
 		i++;
 	}
 	i = 0;
 	while (i < sim->philo_count)
 	{
-		pthread_mutex_lock(&sim->philos[i].meal_mutex);
-		sim->philos[i].last_meal_eaten = sim->start_time;
-		pthread_mutex_unlock(&sim->philos[i].meal_mutex);
+		pthread_create(&sim->philos[i].thread_handle, NULL,
+			thread_start, &sim->philos[i]);
 		i++;
 	}
 	pthread_create(&sim->monitor_handle, NULL, start_monitor, sim);

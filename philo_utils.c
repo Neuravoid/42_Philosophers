@@ -6,7 +6,7 @@
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 15:52:03 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 16:59:07 by ualkan           ###   ########.fr       */
+/*   Updated: 2025/09/14 18:52:46 by ualkan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,13 @@ void	ft_status(int status, t_philo *philo)
 {
 	long long	time_offset;
 
-	pthread_mutex_lock(&philo->sim->log_mutex);
-	if (check_stop_flag(philo))
+	pthread_mutex_lock(&philo->sim->stop_mutex);
+	if (philo->sim->stop_flag)
+	{
+		pthread_mutex_unlock(&philo->sim->stop_mutex);
 		return ;
+	}
+	pthread_mutex_lock(&philo->sim->log_mutex);
 	time_offset = get_time() - philo->sim->start_time;
 	if (status == 1)
 		printf("%lld %d has taken a fork\n", time_offset, philo->id);
@@ -53,4 +57,5 @@ void	ft_status(int status, t_philo *philo)
 	else if (status == 4)
 		printf("%lld %d is sleeping\n", time_offset, philo->id);
 	pthread_mutex_unlock(&philo->sim->log_mutex);
+	pthread_mutex_unlock(&philo->sim->stop_mutex);
 }
