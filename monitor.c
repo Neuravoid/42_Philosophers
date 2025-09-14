@@ -31,6 +31,7 @@ int	log_checker(t_philo *philo)
 {
 	long long	now;
 	long long	last;
+	long long	time_since_meal;
 
 	pthread_mutex_lock(&philo->sim->stop_mutex);
 	if (philo->sim->stop_flag)
@@ -39,11 +40,13 @@ int	log_checker(t_philo *philo)
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->sim->stop_mutex);
+	now = get_time();
 	pthread_mutex_lock(&philo->meal_mutex);
 	last = philo->last_meal_eaten;
 	pthread_mutex_unlock(&philo->meal_mutex);
-	now = get_time();
-	if (now - last > philo->sim->time_to_die)
+	
+	time_since_meal = now - last;
+	if (time_since_meal >= philo->sim->time_to_die)
 	{
 		pthread_mutex_lock(&philo->sim->stop_mutex);
 		if (!philo->sim->stop_flag)
@@ -82,6 +85,7 @@ void	*start_monitor(void *arg)
 	int		i;
 
 	sim = (t_sim *)arg;
+
 	while (1)
 	{
 		i = 0;
@@ -98,7 +102,7 @@ void	*start_monitor(void *arg)
 			pthread_mutex_unlock(&sim->stop_mutex);
 			return (NULL);
 		}
-		spend_time(1);
+		usleep(50);
 	}
 	return (NULL);
 }

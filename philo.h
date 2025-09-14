@@ -6,7 +6,7 @@
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 16:04:20 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 11:53:21 by ualkan           ###   ########.fr       */
+/*   Updated: 2025/09/14 13:02:41 by ualkan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void		handle_routine(t_philo *philo);
 void		start_simulation(t_sim *sim);
 void		*start_monitor(void *arg);
 void		spend_time(long long ms);
+void		spend_time_interruptible(long long ms, t_philo *philo);
 int			check_stop_flag(t_philo *philo);
 void		clean_resources(t_sim *sim);
 
