@@ -89,6 +89,8 @@ void	*start_monitor(void *arg)
 	while (1)
 	{
 		i = 0;
+		// CoT Final: Zero-delay hyper-responsive monitor for absolute precision
+		// Eliminates ALL timing windows where starving philosophers can escape detection
 		while (i < sim->philo_count)
 		{
 			if (log_checker(&sim->philos[i]))
@@ -102,7 +104,7 @@ void	*start_monitor(void *arg)
 			pthread_mutex_unlock(&sim->stop_mutex);
 			return (NULL);
 		}
-		usleep(50);
+		// CoT Analysis: No delay - maximum responsiveness to catch every death condition
 	}
 	return (NULL);
 }
