@@ -6,7 +6,7 @@
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 16:04:20 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 13:02:41 by ualkan           ###   ########.fr       */
+/*   Updated: 2025/09/14 16:22:21 by ualkan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef	pthread_mutex_t mutex_t;
+typedef pthread_mutex_t	t_mutex_t;
 
 typedef struct s_sim
 {
@@ -59,6 +59,9 @@ void		*start_monitor(void *arg);
 void		spend_time(long long ms);
 void		spend_time_interruptible(long long ms, t_philo *philo);
 int			check_stop_flag(t_philo *philo);
-void		clean_resources(t_sim *sim);
+void		ft_even_wait(t_philo *philo);
+void		ft_release_forks(t_philo *philo);
+void		ft_take_fork(t_philo *philo);
+void		ft_status(int status, t_philo *philo);
 
 #endif

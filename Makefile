@@ -9,8 +9,10 @@ SRCS = main.c \
 	init.c \
 	time_utils.c \
 	philo.c \
+	philo_utils.c \
 	simulation.c \
-	monitor.c
+	monitor.c 
+	
 
 OBJS = $(SRCS:.c=.o)
 

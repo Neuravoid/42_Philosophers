@@ -6,7 +6,7 @@
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:00:00 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 15:13:02 by ualkan           ###   ########.fr       */
+/*   Updated: 2025/09/14 16:59:34 by ualkan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,18 @@ void	spend_time(long long ms)
 
 	start = get_time();
 	target = start + ms;
-
 	while (get_time() < target)
 	{
 		remaining = target - get_time();
-		// CoT Final: Ultra-precise timing with conservative sleep scaling
 		if (remaining > 10)
-			usleep(remaining * 80);   // Conservative sleep reduction  
+			usleep(remaining * 80);
 		else if (remaining > 2)
-			usleep(200);              // Fine-tuned sleep for final milliseconds
+			usleep(200);
 		else if (remaining > 1)
-			usleep(100);              // Ultra-fine sleep 
-		// Final 1ms: Pure busy-wait for microsecond precision
+			usleep(100);
 	}
 }
+
 void	spend_time_interruptible(long long ms, t_philo *philo)
 {
 	long long	start;
@@ -50,20 +48,30 @@ void	spend_time_interruptible(long long ms, t_philo *philo)
 
 	start = get_time();
 	target = start + ms;
-	
 	while (get_time() < target)
 	{
 		if (check_stop_flag(philo))
 			break ;
-		
 		remaining = target - get_time();
-		// CoT Final: Ultra-precise interruptible timing with conservative scaling
 		if (remaining > 10)
-			usleep(remaining * 80);   // Conservative sleep reduction
+			usleep(remaining * 80);
 		else if (remaining > 2)
-			usleep(200);              // Fine-tuned sleep for final milliseconds
+			usleep(200);
 		else if (remaining > 1)
-			usleep(100);              // Ultra-fine sleep  
-		// Final 1ms: Pure busy-wait for microsecond precision
+			usleep(100);
+	}
+}
+
+void	ft_even_wait(t_philo *philo)
+{
+	long long	stagger_delay;
+
+	if (philo->id % 2 == 0)
+	{
+		stagger_delay = (philo->sim->philo_count / 2)
+			+ (philo->id / 2);
+		if (stagger_delay > 15)
+			stagger_delay = 15;
+		spend_time_interruptible(stagger_delay, philo);
 	}
 }

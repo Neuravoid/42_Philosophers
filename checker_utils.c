@@ -5,29 +5,26 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/06 18:48:43 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 00:43:16 by ualkan           ###   ########.fr       */
-/*                                     z                                       */
+/*   Created: 2025/09/14 15:41:33 by ualkan            #+#    #+#             */
+/*   Updated: 2025/09/14 15:58:08 by ualkan           ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
- 
-
-static int ft_containalpha(const char *str)
+static int	ft_containalpha(const char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	
 	while (str[i])
 	{
 		if (!(47 < str[i] && 58 > str[i]))
-			return 1;
+			return (1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
-int ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int		sign;
 	int		result;
@@ -35,7 +32,6 @@ int ft_atoi(const char *str)
 
 	if (ft_containalpha(str))
 		return (-42);
-	
 	i = 0;
 	result = 0;
 	sign = 1;

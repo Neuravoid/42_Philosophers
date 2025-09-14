@@ -6,11 +6,29 @@
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 13:53:19 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 11:52:17 by ualkan           ###   ########.fr       */
+/*   Updated: 2025/09/14 16:20:56 by ualkan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	clean_resources(t_sim *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->philo_count)
+	{
+		pthread_mutex_destroy(&sim->forks[i]);
+		pthread_mutex_destroy(&sim->philos[i].meal_mutex);
+		i++;
+	}
+	pthread_mutex_destroy(&sim->log_mutex);
+	pthread_mutex_destroy(&sim->stop_mutex);
+	free(sim->philos);
+	free(sim->forks);
+	free(sim);
+}
 
 void	*thread_start(void *arg)
 {
@@ -27,7 +45,6 @@ void	start_simulation(t_sim *sim)
 
 	i = 0;
 	sim->start_time = get_time() + (sim->philo_count / 100);
-
 	while (i < sim->philo_count)
 	{
 		pthread_create(&sim->philos[i].thread_handle, NULL,

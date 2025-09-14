@@ -1,24 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/14 15:41:58 by ualkan            #+#    #+#             */
+/*   Updated: 2025/09/14 17:12:21 by ualkan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void	clean_resources(t_sim *sim)
-{
-	int	i;
-
-	i = 0;
-	while (i < sim->philo_count)
-	{
-		pthread_mutex_destroy(&sim->forks[i]);
-		pthread_mutex_destroy(&sim->philos[i].meal_mutex);
-		i++;
-	}
-	pthread_mutex_destroy(&sim->log_mutex);
-	pthread_mutex_destroy(&sim->stop_mutex);
-	free(sim->philos);
-	free(sim->forks);
-	free(sim);
-}
-
-void	stop_philo(t_philo *philo, long long now)
+static void	stop_philo(t_philo *philo, long long now)
 {
 	philo->sim->stop_flag = 1;
 	pthread_mutex_unlock(&philo->sim->stop_mutex);
@@ -44,7 +38,6 @@ int	log_checker(t_philo *philo)
 	pthread_mutex_lock(&philo->meal_mutex);
 	last = philo->last_meal_eaten;
 	pthread_mutex_unlock(&philo->meal_mutex);
-	
 	time_since_meal = now - last;
 	if (time_since_meal >= philo->sim->time_to_die)
 	{
@@ -59,7 +52,7 @@ int	log_checker(t_philo *philo)
 	return (0);
 }
 
-int	check_all_eaten(t_sim *sim)
+static int	check_all_eaten(t_sim *sim)
 {
 	int	i;
 	int	all_done;
@@ -85,12 +78,9 @@ void	*start_monitor(void *arg)
 	int		i;
 
 	sim = (t_sim *)arg;
-
 	while (1)
 	{
 		i = 0;
-		// CoT Final: Zero-delay hyper-responsive monitor for absolute precision
-		// Eliminates ALL timing windows where starving philosophers can escape detection
 		while (i < sim->philo_count)
 		{
 			if (log_checker(&sim->philos[i]))
@@ -104,7 +94,6 @@ void	*start_monitor(void *arg)
 			pthread_mutex_unlock(&sim->stop_mutex);
 			return (NULL);
 		}
-		// CoT Analysis: No delay - maximum responsiveness to catch every death condition
 	}
 	return (NULL);
 }

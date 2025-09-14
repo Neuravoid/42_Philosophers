@@ -6,18 +6,18 @@
 /*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 19:53:00 by ualkan            #+#    #+#             */
-/*   Updated: 2025/09/14 11:51:45 by ualkan           ###   ########.fr       */
+/*   Updated: 2025/09/14 16:19:32 by ualkan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	create_forks(t_sim *simulation)
+static int	create_forks(t_sim *simulation)
 {
-	mutex_t	*forks;
-	int		i;
+	t_mutex_t	*forks;
+	int			i;
 
-	forks = malloc(sizeof(mutex_t) * simulation->philo_count);
+	forks = malloc(sizeof(t_mutex_t) * simulation->philo_count);
 	if (!forks)
 		return (-1);
 	i = 0;
@@ -30,7 +30,7 @@ int	create_forks(t_sim *simulation)
 	return (0);
 }
 
-int	create_philos(t_sim *sim)
+static int	create_philos(t_sim *sim)
 {
 	int		i;
 	t_philo	*philos;
@@ -79,4 +79,3 @@ t_sim	*init_simulation(int ac, char **av, t_sim *simulation)
 	}
 	return (simulation);
 }
-
